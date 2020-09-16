@@ -1,4 +1,4 @@
-package no.ntnu.util;
+package no.trygvejw.misc;
 
 import java.io.*;
 import java.util.*;
