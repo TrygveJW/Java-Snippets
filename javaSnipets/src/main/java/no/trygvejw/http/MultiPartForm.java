@@ -1,16 +1,15 @@
 package no.trygvejw.http;
 
-import no.trygvejw.debugLogger.DebugLogger;
 
 import java.io.*;
 import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class MultiPartForm {
 
     // ---- fields ---- //
-    private static final DebugLogger dbl = new DebugLogger(false);
     private final Vector<FormPart> formParts = new Vector<>();
 
     private final UUID boundary = UUID.randomUUID();
@@ -20,7 +19,6 @@ public class MultiPartForm {
     // ---- public ---- //
 
     public String getContentTypeHeader(){
-        dbl.log("multipart/form-data; boundary=" + boundary);
         return "multipart/form-data; boundary=" + boundary;
     }
 
@@ -40,6 +38,11 @@ public class MultiPartForm {
 
     public MultiPartForm addPart(String name, File value){
         formParts.add(new FilePart(value, name));
+        return this;
+    }
+
+    public MultiPartForm addPart(String name, String filename, String mimetype, InputStream stream){
+        formParts.add(new StreamPart(name,filename, mimetype,stream));
         return this;
     }
 
@@ -133,6 +136,22 @@ public class MultiPartForm {
         }
     }
 
+    private class StreamPart extends FormPart implements StreamablePart{
+        InputStream value;
+
+        public StreamPart(String name, String fileName, String mimetype, InputStream stream) {
+            super(name, mimetype);
+            this.value = stream;
+            this.dispositionParams = "filename=\"" + fileName + "\"";
+            this.typeParams = " charset=UTF-8";
+        }
+
+        @Override
+        public InputStream getInputStreamStream() {
+            return value;
+        }
+    }
+
     private class bytesIterator implements Iterator<byte[]> {
         private Iterator<FormPart> iterator = formParts.iterator();
 
@@ -168,7 +187,6 @@ public class MultiPartForm {
                 if(part instanceof StreamablePart){
                     this.activeStream = ((StreamablePart) part).getInputStreamStream();
                 }
-                dbl.sLog(stringPart);
                 return stringPart.getBytes(StandardCharsets.UTF_8);
             } else {
                 byte[] buffer = new byte[4096];
@@ -179,7 +197,6 @@ public class MultiPartForm {
                     } else {
                       activeStream.close();
                       activeStream = null;
-                      dbl.sLog("\n\r");
                       return "\n\r".getBytes(StandardCharsets.UTF_8);
                     }
                 } catch (IOException e){
