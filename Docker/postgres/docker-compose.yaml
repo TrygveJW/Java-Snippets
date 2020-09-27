@@ -2,12 +2,12 @@ version: '3.8'
 
 x-DbLoggin:
   environment:
-    &db-login
+    &postgres-login
     # the posgress user master password
     POSTGRES_PASSWORD: "password"
 
     USER_USERNAME: "docker"
-    USER_DB_NAME: "docker_db"
+    USER_DB_NAME: "docker"
     USER_PASSWORD: "docker"
   
   networks: 
@@ -22,7 +22,7 @@ services:
 
     
     environment: 
-      << : *db-login
+      << : *postgres-login
       PGDATA: "/var/lib/postgresql/data/pgdata"
       AVAL: "abcd"
     
@@ -48,9 +48,8 @@ services:
 
   
 networks:
-  aaaa:
   local_network:
-    #external: false
+    external: false
     ipam:
       driver: default
       config:
