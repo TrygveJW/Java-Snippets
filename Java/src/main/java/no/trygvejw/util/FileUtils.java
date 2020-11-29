@@ -1,4 +1,4 @@
-package no.trygvejw.util;
+package no.twct.recipeheaven.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,6 +62,33 @@ public class FileUtils {
         } else {
             return file;
         }
+    }
 
+    /**
+     * Utility method for getting the file ending of the provided file.
+     * If no ending is found null is returned.
+     * The dot is included so abc.jpg yields .jpg and abc yields null
+     *
+     * @param file the file to get the file extention from
+     * @return the file extension to the file at the provided path inclusive the dot null if no extension
+     */
+    public static String getFileExtension(File file){
+        return getFilePathExtension(file.getAbsolutePath());
+    }
+    /**
+     * Utility method for getting the file ending of the provided file path.
+     * If no ending is found null is returned.
+     * The dot is included so abc.jpg yields .jpg and abc yields null
+     *
+     * @param filePath the filepath to get the extension from
+     * @return the file extension to the file at the provided path inclusive the dot null if no extension
+     */
+    public static String getFilePathExtension(String filePath){
+        int lastDot = filePath.lastIndexOf(".");
+        if (lastDot > 0) {
+            return  filePath.substring(lastDot);
+        } else {
+            return null;
+        }
     }
 }
