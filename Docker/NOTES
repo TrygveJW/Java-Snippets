@@ -1,0 +1,4 @@
+- multiple composes kan kjøres fra samme som christoffer jor dvs du kan lag compose blokker som kan kjøres for og jør stuff
+    som og ha en egen compose for nginx som staar fritt saa man ikke treng og kommenter det ut hele tiden 
+- lag en bygge compose fil som kan bygge foreksempel maven ol fra et image saa man ikke trenger og tenke paa versjoner.
+- lag en maven build sak som bruke den -from disk elns optionen for og bygg i selve build staget ikke i kjør, mere ryddig da.
