@@ -1,6 +1,6 @@
 package no.trygvejw.sockets.todo.protocoll.request;
 
-import no.fractal.socket.factorysmabyeidk.Segment;
+import no.trygvejw.sockets.todo.protocoll.Segment;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;

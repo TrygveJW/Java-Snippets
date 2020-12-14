@@ -1,5 +1,7 @@
 package no.trygvejw.sockets.todo;
 
+import no.trygvejw.sockets.todo.protocoll.FractalClient;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;

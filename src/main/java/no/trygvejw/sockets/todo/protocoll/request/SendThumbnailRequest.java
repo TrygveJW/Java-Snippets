@@ -1,7 +1,8 @@
 package no.trygvejw.sockets.todo.protocoll.request;
 
-import no.fractal.socket.factorysmabyeidk.Segment;
-import no.fractal.util.StreamUtils;
+
+import no.trygvejw.sockets.todo.protocoll.Segment;
+import no.trygvejw.util.StreamUtils;
 
 import java.io.File;
 import java.io.IOException;

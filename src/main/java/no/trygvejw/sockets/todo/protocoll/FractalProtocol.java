@@ -1,7 +1,7 @@
 package no.trygvejw.sockets.todo.protocoll;
 
 
-import no.fractal.socket.factorysmabyeidk.request.FractalRequestMeta;
+import no.trygvejw.sockets.todo.protocoll.request.FractalRequestMeta;
 import org.json.JSONArray;
 import org.json.JSONTokener;
 

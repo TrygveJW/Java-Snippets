@@ -1,12 +1,13 @@
 package no.trygvejw.sockets.todo.protocoll;
 
 
-import no.fractal.socket.Client;
-import no.fractal.socket.FractalProtocol;
-import no.fractal.socket.TcpServer;
-import no.fractal.socket.factorysmabyeidk.request.AbstractRequest;
-import no.fractal.socket.factorysmabyeidk.request.FractalRequestMeta;
-import no.fractal.socket.factorysmabyeidk.request.SendThumbnailRequest;
+
+
+import no.trygvejw.sockets.todo.Client;
+import no.trygvejw.sockets.todo.TcpServer;
+import no.trygvejw.sockets.todo.protocoll.request.AbstractRequest;
+import no.trygvejw.sockets.todo.protocoll.request.FractalRequestMeta;
+import no.trygvejw.sockets.todo.protocoll.request.SendThumbnailRequest;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -19,7 +20,7 @@ public class FractalClient extends Client {
 	// Handles logging for the FractalClient
 	private static Logger LOGGER = Logger.getLogger(FractalClient.class.getName());
 
-	private no.fractal.socket.FractalProtocol protocol = new FractalProtocol();
+	private FractalProtocol protocol = new FractalProtocol();
 
 
 	public FractalClient(Socket clientSocket, TcpServer server) throws IOException {
@@ -45,7 +46,7 @@ public class FractalClient extends Client {
 
 		while (true) {
 
-			FractalRequestMeta requestMeta = no.fractal.socket.factorysmabyeidk.FractalProtocol.parseRequestMeta(in);
+			FractalRequestMeta requestMeta = FractalProtocol.parseRequestMeta(in);
 
 			AbstractRequest request = switch (requestMeta.getRequestId()){
 				case "THUMBNAIL" -> new SendThumbnailRequest(requestMeta);
