@@ -7,21 +7,37 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Stream;
 
+
+/**
+ * Multipart form builder allowing for easy creation of multipart forms
+ */
 public class MultiPartForm {
 
-    // ---- fields ---- //
+
     private final Vector<FormPart> formParts = new Vector<>();
 
     private final UUID boundary = UUID.randomUUID();
 
-    // ---- accessors ---- //
-    // ---- constructors ---- //
-    // ---- public ---- //
-
+    /**
+     * returns the content type header with the multipart boundary
+     * @return the content type header with the multipart boundary
+     */
     public String getContentTypeHeader(){
         return "multipart/form-data; boundary=" + boundary;
     }
 
+    /**
+     * returns the iterator iterating over the bytes in the multipart form
+     * @return the iterator iterating over the bytes in the multipart form
+     */
+    public Iterator<byte[]> getByteIterator(){
+        return new bytesIterator();
+    }
+
+    /**
+     * returns the java.net http body publisher for the multipart form
+     * @return body publisher for the form
+     */
     public HttpRequest.BodyPublisher getPublisher(){
         if (formParts.size() == 0){
             throw new IllegalStateException("Must have at least one part in the multi part form");
@@ -31,16 +47,36 @@ public class MultiPartForm {
 
     }
 
+    /**
+     * Adds a string part to the multipart form.
+     * @param name the name of the part.
+     * @param value the string to put in the part.
+     * @return the current form.
+     */
     public MultiPartForm addPart(String name, String value){
         formParts.add(new StringPart(value, name));
         return this;
     }
 
+    /**
+     * Adds a file to the multipart form.
+     * @param name the name of the part.
+     * @param value the file objet.
+     * @return the current form.
+     */
     public MultiPartForm addPart(String name, File value){
         formParts.add(new FilePart(value, name));
         return this;
     }
 
+    /**
+     * Adds a bytestream to the form.
+     * @param name the name of the part.
+     * @param filename the filename of the stream content.
+     * @param mimetype the mimetype of the stream content.
+     * @param stream the input stream to stream.
+     * @return the current form.
+     */
     public MultiPartForm addPart(String name, String filename, String mimetype, InputStream stream){
         formParts.add(new StreamPart(name,filename, mimetype,stream));
         return this;
@@ -49,10 +85,6 @@ public class MultiPartForm {
 
 
     // ---- private ---- //
-
-
-
-
 
 
     private abstract class FormPart{
