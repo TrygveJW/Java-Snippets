@@ -5,7 +5,7 @@ import no.trygvejw.util.ThrowingConsumer;
 
 import java.sql.*;
 
-abstract class PsqlDb {
+public class PsqlDb {
 
     /*
     todo: dnne må bli en singelton som kan configureres med om man skal vente ved no connection om binningen skal holdes åpen osv
@@ -14,6 +14,15 @@ abstract class PsqlDb {
 
 
      */
+
+
+    PsqlDb(boolean keepalive){
+        this.keepalive = keepalive;
+
+    }
+
+    private boolean keepalive = false;
+    private Connection connection;
 
     private static final String url = System.getenv("SQLURL");
     private static final String dbUser = System.getenv("POSGRESS_USER");
@@ -24,12 +33,12 @@ abstract class PsqlDb {
 
 
 
-    protected static Connection tryConnectToDB() throws SQLException{
+    private Connection tryConnectToDB() throws SQLException{
         allQueries.log("try connect to db", "url", url, "user", dbUser, "passwd", dbPassword);
         Connection connection = null;
 
         try{
-            Class.forName("org.postgresql.Driver"); // i think this is to chek if the class exists
+            Class.forName("org.postgresql.Driver");
 
             connection = DriverManager.getConnection(url, dbUser, dbPassword);
         } catch (ClassNotFoundException e){
@@ -39,12 +48,34 @@ abstract class PsqlDb {
         return connection;
     }
 
+    private Connection getConnection() throws SQLException {
+
+
+        if (keepalive){
+
+
+            if (connection == null){
+                // if first time connect make the connection
+                connection = this.tryConnectToDB();
+
+            } else if(connection.isClosed()){
+                // if the connection is closed open it again
+                connection = this.tryConnectToDB();
+            }
+            return connection;
+
+        } else {
+            return this.tryConnectToDB();
+        }
+
+    }
 
 
 
-    protected static void sqlQuery(String query, ThrowingConsumer<ResultSet, SQLException> rowHandler) throws SQLException{
 
-        Connection connection = tryConnectToDB();
+    public void sqlQuery(String query, ThrowingConsumer<ResultSet, SQLException> rowHandler) throws SQLException{
+
+        Connection connection = this.getConnection();
         Statement statement = connection.createStatement();
 
         allQueries.log("making SQL query:\n", query);
@@ -57,12 +88,15 @@ abstract class PsqlDb {
 
         resultSet.close();
         statement.close();
-        connection.close();
+        if (!this.keepalive){
+            connection.close();
+        }
+
 
     }
 
 
-    protected static void sqlUpdate(String query) throws SQLException{
+    public void sqlUpdate(String query) throws SQLException{
         Connection connection = tryConnectToDB();
         Statement statement = connection.createStatement();
 
@@ -71,7 +105,9 @@ abstract class PsqlDb {
 
 
         statement.close();
-        connection.close();
+        if (!this.keepalive){
+            connection.close();
+        }
 
     }
 }
