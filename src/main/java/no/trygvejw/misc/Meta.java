@@ -5,7 +5,7 @@ import java.util.*;
 
 /**
  * metacoding
- * todo: find a better name please
+ *
  */
 public class Meta {
 
@@ -15,7 +15,7 @@ public class Meta {
      * @return returns a array with ClassPath objects
      */
     public static ClassPath[] probeForClassPath(File startNode){
-        // thread safing the list, because we are only adding this is'nt strictly neccecery
+        // thread safing the list, because we are only adding this isnt strictly neccecery
         List<ClassPath> retunlist = (Collections.synchronizedList(new ArrayList<>()));
         if (startNode.isDirectory()){
             Meta.recursiveProbe(startNode, retunlist);
@@ -40,7 +40,7 @@ public class Meta {
             }
         }
 
-        scanThreads.forEach(tr -> tr.run());
+        scanThreads.forEach(tr -> tr.start());
         toScan.forEach((scanfile) -> {
             if (Meta.scanFile(scanfile)){
                 returnList.add(new ClassPath(scanfile));

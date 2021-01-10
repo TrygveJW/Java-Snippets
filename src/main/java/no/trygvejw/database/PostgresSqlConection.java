@@ -1,24 +1,23 @@
-package no.trygvejw.postgress;
+package no.trygvejw.database;
 
 import no.trygvejw.debugLogger.DebugLogger;
 import no.trygvejw.util.ThrowingConsumer;
 
 import java.sql.*;
 
-public class PsqlDb {
 
-    /*
-    todo: dnne må bli en singelton som kan configureres med om man skal vente ved no connection om binningen skal holdes åpen osv
-            - kan kansje også ha mulighet til og spinne opp en tråd med en åpen conn som kan brukes.
+/**
+ * QOL object for interacting with a postgres sql database.
+ * Has the option to toggle whether or not to keep the connection open.
+ */
+public class PostgresSqlConection {
 
-
-
+    /**
+     * Creates a connection object.
+     * @param keepalive whether or not to keep the connection open after a query.
      */
-
-
-    PsqlDb(boolean keepalive){
+    public PostgresSqlConection(boolean keepalive){
         this.keepalive = keepalive;
-
     }
 
     private boolean keepalive = false;
@@ -32,7 +31,10 @@ public class PsqlDb {
     protected static final DebugLogger errorQueries = new DebugLogger(true);
 
 
-
+    /**
+     * Try to connect to the db
+     * @return a connection object, null if unsuccessful.
+     */
     private Connection tryConnectToDB() throws SQLException{
         allQueries.log("try connect to db", "url", url, "user", dbUser, "passwd", dbPassword);
         Connection connection = null;
@@ -71,8 +73,12 @@ public class PsqlDb {
     }
 
 
-
-
+    /**
+     * Runs a query to the database and passes the resulting data to the provided consumer.
+     * @param query the query to run.
+     * @param rowHandler the Throwing consumer to handle the output.
+     * @throws SQLException if the query returns an error.
+     */
     public void sqlQuery(String query, ThrowingConsumer<ResultSet, SQLException> rowHandler) throws SQLException{
 
         Connection connection = this.getConnection();
@@ -95,7 +101,11 @@ public class PsqlDb {
 
     }
 
-
+    /**
+     * Runs an sql operation that does not return any data.
+     * @param query the query to run
+     * @throws SQLException if the query returns an error.
+     */
     public void sqlUpdate(String query) throws SQLException{
         Connection connection = tryConnectToDB();
         Statement statement = connection.createStatement();

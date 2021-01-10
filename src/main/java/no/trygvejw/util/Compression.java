@@ -16,7 +16,9 @@ public class Compression {
     private static final DebugLogger dbl = new DebugLogger(false);
 
     /*
-        TODO: rydd opp her, tenker denne burde reduseres til ferre fungsjoner, burde også kasnej ha et filter på hva som skal taes med
+        TODO: clean up
+
+        TODO: probably shold have some tests here
 
 
 

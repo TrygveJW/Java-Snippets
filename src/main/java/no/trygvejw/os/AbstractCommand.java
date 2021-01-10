@@ -1,7 +1,8 @@
 package no.trygvejw.os;
 
 
-import no.fractal.debugLogger.DebugLogger;
+
+import no.trygvejw.debugLogger.DebugLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -202,7 +203,7 @@ public abstract class AbstractCommand {
 
 
     /**
-     * Builds the docker command and returns a list of the command parts.
+     * Builds the command and returns a list of the command parts.
      *
      * @return A list of all the command parts for the command to run.
      */
