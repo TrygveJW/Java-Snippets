@@ -9,19 +9,8 @@ import java.util.Iterator;
 
 public class StreamUtils {
 
-    public static JSONObject readJsonObject(BufferedInputStream inputStream, int byteSize) throws IOException {
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        JSONObject jsonObject = new JSONObject(
-                new JSONTokener(
-                        new String(inputStream.readNBytes(byteSize))));
-
-
-        return jsonObject;
-    }
-
-    public static void readImageToFile(BufferedInputStream inputStream, int byteSize, File savePath) throws IOException {
+    // -- from streams -> to something -- //
+    public static void writeStreamToFile(BufferedInputStream inputStream, int byteSize, File savePath) throws IOException {
 
         FileOutputStream outputStream = new FileOutputStream(savePath);
 
@@ -98,9 +87,5 @@ public class StreamUtils {
         outputStream.write(string.getBytes());
     }
 
-    public static void writeJsonToStream(BufferedOutputStream outputStream, JSONObject jsonObject) throws IOException {
-        writeStringToStream(outputStream, jsonObject.toString());
 
-
-    }
 }

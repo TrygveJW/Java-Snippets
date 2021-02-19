@@ -1,3 +1,5 @@
+package no.trygvejw.dataHolders;
+
 /**
  * Utillity class representing an integer range.
  * The values are final and cannot be changed

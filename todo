@@ -1,0 +1,4 @@
+- jøre stuff omm til injected klasser og ikke statiske metoder
+- Implementer interfacer (adaptere) for alle metodene i util klassene, da kan man lage unit tester siden man ikke baserer seg på implementasjonen i selve tingen og kan lage en dummy for unit tester.
+    nice og ha hatt en dummy for alle som ikke kan feile i.e. hvor feilbare ting som filsystem brukes returner det somme hver gang id tester saken
+- Faktisk lage tester til tingene her, ikke flink til og skrive tester og burde bli flinkere til og gjøre det
